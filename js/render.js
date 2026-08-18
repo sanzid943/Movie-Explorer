@@ -1,6 +1,4 @@
-// ============================================================
 //  RENDER HELPERS - pure functions that return HTML strings
-// ============================================================
 
 function posterUrl(path) {
   return path ? CONFIG.IMG_BASE + path : "https://placehold.co/500x750?text=No+Poster";
@@ -20,6 +18,7 @@ function ratingOf(vote) {
 
 // cache full movie objects by id so favorite/watchlist actions always
 // have complete data (title, poster, rating, release date) to store
+
 window.MOVIE_CACHE = window.MOVIE_CACHE || {};
 
 function movieCardHTML(movie, isFav) {

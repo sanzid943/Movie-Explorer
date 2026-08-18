@@ -1,6 +1,4 @@
-// ============================================================
 //  APP - routing, state, page controllers
-// ============================================================
 
 const appEl = document.getElementById("app");
 const genreSelectEl = document.getElementById("genre-select");
@@ -11,7 +9,9 @@ const searchInputEl = document.getElementById("search-input");
 let GENRES = [];
 let GENRE_MAP = {};
 
-// ---------- Watchlist (localStorage) ----------
+
+// Watchlist (localStorage)
+
 const WATCHLIST_KEY = "movieExplorer.watchlist";
 
 function getWatchlist() {
@@ -47,7 +47,9 @@ function favIdSet() {
   return new Set(getWatchlist().map((m) => m.id));
 }
 
-// ---------- Theme ----------
+
+// Theme
+
 function initTheme() {
   const saved = localStorage.getItem("movieExplorer.theme") || "dark";
   document.body.classList.toggle("dark", saved === "dark");
@@ -59,14 +61,18 @@ themeToggleEl.addEventListener("click", () => {
   themeToggleEl.textContent = isDark ? "☀️" : "🌙";
 });
 
-// ---------- Search form ----------
+
+// Search form
+
 searchFormEl.addEventListener("submit", (e) => {
   e.preventDefault();
   const q = searchInputEl.value.trim();
   if (q) location.hash = `#/search?q=${encodeURIComponent(q)}`;
 });
 
-// ---------- Genre dropdown (nav) ----------
+
+// Genre dropdown (nav)
+
 genreSelectEl.addEventListener("change", () => {
   const id = genreSelectEl.value;
   if (id) location.hash = `#/genre/${id}`;
@@ -82,12 +88,12 @@ async function loadGenresOnce() {
       `<option value="">Genres</option>` +
       GENRES.map((g) => `<option value="${g.id}">${g.name}</option>`).join("");
   } catch (e) {
-    // fine if this fails silently, e.g. missing API key - handled per-page
+    
   }
   return GENRES;
 }
 
-// ---------- Router ----------
+// Router
 function parseHash() {
   const hash = location.hash.replace(/^#/, "") || "/";
   const [pathPart, queryPart] = hash.split("?");
@@ -135,7 +141,9 @@ window.addEventListener("DOMContentLoaded", () => {
   router();
 });
 
-// ---------- Event delegation (cards, favorites, chips, tabs) ----------
+
+// Event delegation (cards, favorites, chips, tabs)
+
 appEl.addEventListener("click", async (e) => {
   const target = e.target.closest("[data-action]");
   if (!target) return;
@@ -148,10 +156,10 @@ appEl.addEventListener("click", async (e) => {
   if (action === "toggle-fav") {
     e.stopPropagation();
     const id = Number(target.dataset.id);
-    // prefer full cached movie data (populated whenever a card/hero/details was rendered)
+    
     let movie = target._movieData || window.MOVIE_CACHE[id];
     if (!movie) {
-      // last-resort fallback: reconstruct minimal object from the DOM
+      
       const card = target.closest(".movie-card") || target.closest(".details-flex");
       const title = card?.querySelector(".movie-title")?.textContent || document.title;
       const img = card?.querySelector("img")?.getAttribute("src") || "";
@@ -179,9 +187,9 @@ appEl.addEventListener("click", async (e) => {
   }
 });
 
-// ============================================================
+
 //  HOME PAGE
-// ============================================================
+
 let homeState = { tab: "trending" };
 
 async function renderHome() {
@@ -225,9 +233,9 @@ async function renderHomeList(tab) {
   listEl.innerHTML = movieGridHTML(data.results, favIdSet());
 }
 
-// ============================================================
+
 //  SEARCH PAGE
-// ============================================================
+
 async function renderSearch(query) {
   searchInputEl.value = query;
   if (!query) {
@@ -254,9 +262,9 @@ async function renderSearch(query) {
   });
 }
 
-// ============================================================
+
 //  GENRE PAGE
-// ============================================================
+
 async function renderGenre(genreId) {
   let page = 1;
   let sortBy = "popularity.desc";
@@ -287,7 +295,7 @@ async function renderGenre(genreId) {
   });
 }
 
-// ---------- shared results-page renderer (search + genre) ----------
+// shared results-page renderer (search + genre)
 function renderResultsPage(opts) {
   const {
     title,
@@ -364,9 +372,9 @@ function renderResultsPage(opts) {
   }
 }
 
-// ============================================================
+
 //  MOVIE DETAILS PAGE
-// ============================================================
+
 async function renderDetails(id) {
   const movieId = Number(id);
   const [details, credits, videos, recs] = await Promise.all([
@@ -429,9 +437,9 @@ async function renderDetails(id) {
   favBtn._movieData = details;
 }
 
-// ============================================================
+
 //  WATCHLIST PAGE
-// ============================================================
+
 function renderWatchlist() {
   const list = getWatchlist();
   appEl.innerHTML = `
