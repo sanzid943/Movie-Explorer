@@ -1,6 +1,6 @@
 # 🎬 Movie Explorer
 
-A movie discovery web app built with plain **HTML, CSS, and JavaScript** using data from **TMDB**.
+A movie discovery web app built using data from **TMDB**.
 
 ## Features
 
